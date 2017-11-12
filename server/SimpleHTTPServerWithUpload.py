@@ -365,6 +365,7 @@ class SimpleHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       if word in (os.curdir, os.pardir): continue
       path = os.path.join(path, word)
     print 'translate_path path is: ', path
+    print 'translate_path papapap is: ', path
     return path
   
   def copyfile(self, source, outputfile):
