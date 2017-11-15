@@ -41,6 +41,7 @@ import shutil
 import mimetypes
 import re
 import time
+import json
   
 try:
   from cStringIO import StringIO
@@ -171,31 +172,60 @@ class SimpleHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
   
   def do_POST(self):
     """Serve a POST request."""
-    r, info = self.deal_post_data()
-    print r, info, "by: ", self.client_address
-    f = StringIO()
-    f.write('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
-    f.write("<html>\n<title>Upload Result Page</title>\n")
-    f.write("<body>\n<h2>Upload Result Page</h2>\n")
-    f.write("<hr>\n")
-    if r:
-      f.write("<strong>Success:</strong>")
-    else:
-      f.write("<strong>Failed:</strong>")
-    f.write(info)
-    f.write("<br><a href=\"%s\">back</a>" % self.headers['referer'])
-    f.write("<hr><small>Powered By: bones7456, check new version at ")
-    f.write("<a href=\"http://li2z.cn/?s=SimpleHTTPServerWithUpload\">")
-    f.write("here</a>.</small></body>\n</html>\n")
-    length = f.tell()
-    f.seek(0)
+    # r, info = self.deal_post_data()
+    # print r, info, "by: ", self.client_address
+    # f = StringIO()
+    # f.write('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
+    # f.write("<html>\n<title>Upload Result Page</title>\n")
+    # f.write("<body>\n<h2>Upload Result Page</h2>\n")
+    # f.write("<hr>\n")
+    # if r:
+    #   f.write("<strong>Success:</strong>")
+    # else:
+    #   f.write("<strong>Failed:</strong>")
+    # f.write(info)
+    # f.write("<br><a href=\"%s\">back</a>" % self.headers['referer'])
+    # f.write("<hr><small>Powered By: bones7456, check new version at ")
+    # f.write("<a href=\"http://li2z.cn/?s=SimpleHTTPServerWithUpload\">")
+    # f.write("here</a>.</small></body>\n</html>\n")
+    # length = f.tell()
+    # f.seek(0)
+    # self.send_response(200)
+    # self.send_header("Content-type", "text/html")
+    # self.send_header("Content-Length", str(length))
+    # self.end_headers()
+    # if f:
+    #   self.copyfile(f, self.wfile)
+    #   f.close()
+    path = self.translate_path(self.path)
+    print 'path is: ', path
+    self.getListFiles(path)
+    
+
+    data = { "file":[{"filename":self.fileNames[0], "filesize":self.fileSizes[0]},
+                     {"filename":self.fileNames[1], "filesize":self.fileSizes[1]},
+                     {"filename":self.fileNames[2], "filesize":self.fileSizes[2]}
+    ] }
+    message = json.dumps(data)
+    #print type(message),message
+
     self.send_response(200)
-    self.send_header("Content-type", "text/html")
-    self.send_header("Content-Length", str(length))
+    self.send_header('Content-type', 'application/json')
     self.end_headers()
-    if f:
-      self.copyfile(f, self.wfile)
-      f.close()
+    self.wfile.write(message)
+
+  fileNames = []
+  fileSizes = []
+
+  def getListFiles(self,path):
+    for root, dirs, files in os.walk(path):  
+        self.fileNames = files
+        for file in files: 
+            self.fileSizes.append(sizeof_fmt(os.path.getsize(file)))
+
+        break
+            
+      
       
   def deal_post_data(self):
     boundary = self.headers.plisttext.split("=")[1]
@@ -365,7 +395,7 @@ class SimpleHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       if word in (os.curdir, os.pardir): continue
       path = os.path.join(path, word)
     print 'translate_path path is: ', path
-    print 'translate_path 123 is: ', path
+    print 'translate_path wuruizhu is: ', path
     return path
   
   def copyfile(self, source, outputfile):
