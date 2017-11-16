@@ -200,12 +200,22 @@ class SimpleHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     path = self.translate_path(self.path)
     print 'path is: ', path
     self.getListFiles(path)
-    
+    print 'fileNames length is: ', len(self.fileNames)
 
-    data = { "file":[{"filename":self.fileNames[0], "filesize":self.fileSizes[0]},
-                     {"filename":self.fileNames[1], "filesize":self.fileSizes[1]},
-                     {"filename":self.fileNames[2], "filesize":self.fileSizes[2]}
-    ] }
+    data1 = []
+    for index in range(len(self.fileNames)):
+      #print 'index is: ', index
+      tempDic = {"filename":self.fileNames[index], "filesize":self.fileSizes[index]}
+      #tempDic.get((tempDic.keys())[0])
+      #(tempDic.values())[0]
+      data1.append(tempDic)
+
+    data = {"file":data1}
+
+    # data = { "file":[{"filename":self.fileNames[0], "filesize":self.fileSizes[0]},
+    #                  {"filename":self.fileNames[1], "filesize":self.fileSizes[1]},
+    #                  {"filename":self.fileNames[2], "filesize":self.fileSizes[2]}
+    # ] }
     message = json.dumps(data)
     #print type(message),message
 
@@ -217,14 +227,16 @@ class SimpleHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
   fileNames = []
   fileSizes = []
 
+  fileList = []
+  fileDic = {}
+  #print fileDic 
   def getListFiles(self,path):
     for root, dirs, files in os.walk(path):  
         self.fileNames = files
         for file in files: 
             self.fileSizes.append(sizeof_fmt(os.path.getsize(file)))
-
         break
-            
+       
       
       
   def deal_post_data(self):

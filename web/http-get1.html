@@ -4,6 +4,17 @@
     <head>
         <meta charset="UTF-8">
         <title></title>
+        <style>
+table, td, th
+{
+    border:1px solid blue;
+}
+th
+{
+    background-color:blue;
+    color:white;
+}
+</style>
     </head>
 
     <body>
@@ -15,26 +26,27 @@
         </div>
 
         <template id="grid-template">
-            <span v-text="responseMsg"></span>
+            <!-- <span v-text="responseMsg"></span> -->
              <table>
                 <thead>
                     <tr>
-                        <th v-for="col in columns">
-                            {{ col | uppercase}}
-                        </th>
+                        <td>filename</td>
+                        <td>filesize</td>
+                        <td>operating</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(index,entry) in responseMsg">
-                        <td v-for="col in columns">
-                            {{entry[col]}}
-                        </td>
+                    <tr v-for="data in responseMsg">
+                        <td>{{data.filename}}</td>
+                        <td>{{data.filesize}}</td>
+                        <td><button>Open</button><button>Modify</button><button>Delete</button></td>
                     </tr>
                 </tbody>
             </table>
         </template>
         <script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.3.4/vue-resource.min.js"></script>
+        <script src="http://127.0.0.1:8080/JSON/json2.js"></script>
         <script>
             Vue.component('simple-grid', {
                 template: '#grid-template',
@@ -59,12 +71,15 @@
                         this.$http.post(this.apiUrl)
                             .then((response) => {
                                 console.log(response.data)
-                                console.log((response.body)[0])
+                                //var dataObj = JSON.parse(response.data)
+                                //console.log(dataObj.filename)
+                                //console.log((response.body)[0])
                                 //this.$set('responseMsg',(response.body)[0].res)
-                                this.responseMsg= response.data
+
+                                this.responseMsg = response.data.file
                             })
                             .catch(function(response) {
-                                //console.log('ni mei ya')
+                                  console.log('ni mei ya')
                                 console.log(response)
 
                             })
