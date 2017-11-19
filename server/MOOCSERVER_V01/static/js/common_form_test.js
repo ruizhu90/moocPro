@@ -1,20 +1,26 @@
 // 全局变量a和b，分别获取用户框和密码框的value值
-var a = document.getElementsByTagName("input")[0].value;
-var b = document.getElementsByTagName("input")[1].value;
+//var a = document.getElementById("user").value;
+//var b = document.getElementById("password").value;
 
 //用户框失去焦点后验证value值
 function oBlur_1() {
+    var a = document.getElementById("user").value;
+    //console.log(a);
     if (!a) { //用户框value值为空
         document.getElementById("remind_1").innerHTML = "请输入用户名！";
         document.getElementById("change_margin_1").style.marginBottom = 1 + "px";
+        //console.log("输入为空");
     } else { //用户框value值不为空
         document.getElementById("remind_1").innerHTML = "";
         document.getElementById("change_margin_1").style.marginBottom = 19 + "px";
+        //console.log("输入不为空")
     }
 }
 
 //密码框失去焦点后验证value值
 function oBlur_2() {
+    var b = document.getElementById("password").value;
+    console.log(b);
     if (!b) { //密码框value值为空
         document.getElementById("remind_2").innerHTML = "请输入密码！";
         document.getElementById("change_margin_2").style.marginBottom = 1 + "px";
