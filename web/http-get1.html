@@ -46,7 +46,7 @@ th
         </template>
         <script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.3.4/vue-resource.min.js"></script>
-        <script src="http://127.0.0.1:8080/JSON/json2.js"></script>
+        <script src="http://127.0.0.1:8000/JSON/json2.js"></script>
         <script>
             Vue.component('simple-grid', {
                 template: '#grid-template',
@@ -60,7 +60,7 @@ th
                 data: {
                     gridColumns: ['filename', 'filesize'],
                     responseMsg: [],
-                    apiUrl: 'http://127.0.0.1:8080'
+                    apiUrl: 'http://127.0.0.1:8080/getFileNames'
                 },
                 created() {
                     console.log('created')

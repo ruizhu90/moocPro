@@ -18,9 +18,14 @@ from django.contrib import admin
 # input view
 from message.views import getform
 from message.views import login
-
+from message.views import getFileNames
+from message.views import getHtmlFiles
+from message.views import mgmt_files
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^sign_up/$', getform),
-    url(r'^sign_up/log_in/$', login)
+    url(r'^sign_up/log_in/$', login),
+    url(r'^getFileNames/$', getFileNames),
+    url(r'^http-get1.html$', getHtmlFiles),
+    url(r'^mgmt_files/$', mgmt_files),
 ]
