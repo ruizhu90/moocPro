@@ -9,10 +9,13 @@ import os
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import StreamingHttpResponse
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
-
-
+@csrf_exempt
 def mgmt_files(request): #列出树形目录，上传文件页面
+    print 'mgmt_files'
     if request.method == 'POST':
         path_root = "D:\\py\\ITFiles" #上传文件的主目录
         myFile =request.FILES.get("file", None)    # 获取上传的文件，如果没有文件，则默认为None  
