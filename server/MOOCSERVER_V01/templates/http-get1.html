@@ -48,7 +48,7 @@
                     <ul>
                         <li v-for="item in itemList" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
                             文件名字：{{item.filename}}
-                            文件大小：{{item.filesize}}</br>
+                            文件大小：{{item.filesize}}<button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
                         </li>
                     </ul>
                  </span>
@@ -77,6 +77,7 @@
                 this.getData();
                 },
                 methods: {
+
                 getData:function () {
                 var self = this;
                 this.$http.get("http://127.0.0.1:8000/getFileNames/").then(function (res) {
@@ -106,7 +107,11 @@
                 // })
                }
 })
-}
+},
+               deleteFile:function(params){
+                       console.log('delete')
+                       alert(params);
+               }
 }
 });
         </script>
@@ -154,27 +159,23 @@
                     this.msg = text;
                      alert(this.msg);
                 });
-                //var params = document.getElementById('file').files[0]
-              //   return new Promise((resolve, reject) => {
-              //   Vue.http.post(
-              //     url,
-              //     {
-              //       params
-              //     },
-              //     {emulateJSON: true}
-              //   )
-              //   .then((res) => {
-              //     resolve(res.body);
-              //   })
-              //   .catch((res) => {
-              //     reject(res.body);
-              //   });
-              // });
+                
                 }
-                                    
+                function deleteFile(params){
+                    console.log(params)
+                    Vue.http.post("http://127.0.0.1:8000/deleteFile/").then(function(response) {
+                    return response.text();
+                    console.log(response)
+                }, function(err) {
+                    //alert("goodbye world")
+                    console.log(err)
+                }).then((text) => {
+                    // console.log(text)
+                    this.msg = text;
+                     alert(this.msg);
+                });
+                }
 
-       
-              
         </script>
     </body>
 

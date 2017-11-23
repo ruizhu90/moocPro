@@ -12,6 +12,19 @@ from django.http import StreamingHttpResponse
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
+@csrf_exempt
+def deleteFile(request):
+     print 'deleteFile '
+
+
+
+
+
+
+
+
+
+
 
 @csrf_exempt
 def mgmt_files(request): #列出树形目录，上传文件页面

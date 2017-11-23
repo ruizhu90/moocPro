@@ -21,6 +21,7 @@ from message.views import login
 from message.views import getFileNames
 from message.views import getHtmlFiles
 from message.views import mgmt_files
+from message.views import deleteFile
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^sign_up/$', getform),
@@ -28,4 +29,6 @@ urlpatterns = [
     url(r'^getFileNames/$', getFileNames),
     url(r'^http-get1.html$', getHtmlFiles),
     url(r'^mgmt_files/$', mgmt_files),
+    url(r'^deleteFile/$', deleteFile),
+    
 ]
