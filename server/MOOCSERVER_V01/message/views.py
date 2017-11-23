@@ -19,10 +19,17 @@ def mgmt_files(request): #列出树形目录，上传文件页面
     # print 'mgmt_files'
     # print request.method
     # if request.method == 'POST':
-    path_root = "F:\\moocPro" #上传文件的主目录
+    
+    # print 'items: ', request.POST.items()
+    myTpye = request.POST.get('type')#获取文件类型，单选框内容
+    # print 'type is: ', request.POST.get('type')
+    # myTpye = request.get("type") 
+    print myTpye
     myFile = request.FILES.get("file",None) # 获取上传的文件，如果没有文件，则默认为None
     print myFile
     # print request
+    path_root = os.path.join('F:\\moocPro\\files',myTpye) #上传文件的主目录
+    print 'path_root: ',path_root
     if not myFile:  
         dstatus = "没有上传文件!"
     else:

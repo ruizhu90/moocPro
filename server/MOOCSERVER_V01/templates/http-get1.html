@@ -5,37 +5,61 @@
         <meta charset="UTF-8">
         <title></title>
     <style type="text/css">
-        body{margin:0; padding:0;}
-        #top{}
-        #centerleft{}
-        #centerright{}
-        #bottomleft{}
-        #bottomcenter{}
-        #bottomright{}
+       
+       .box {
+              display: flex;
+              flex-wrap: wrap;
+            }
+
+       .row{
+              flex-basis: 100%;
+              display:flex;
+            }
+
+       .row:nth-child(2){
+              justify-content: space-between;
+            }
+
+       .row:nth-child(3){
+              justify-content: space-between;
+            }
     </style>
     </head>
 
     <body>
-         <form id="uploadForm" enctype="multipart/form-data">
-            <!-- {% csrf_token %} -->
-            <input id="file" type="file" name="file" > 
-            <input type="radio" name="radio" value="ppt" />PPT 
-            <input type="radio" name="radio" value="word" />脚本文件
-            <input type="radio" name="radio" value="accessibility" />无障碍字幕
-            <input type="radio" name="radio" value="gloss" />手语转写
-            <input type="radio" name="radio" value="video" />视频
-            <button id="upload" type="button" onclick="test()"  style="margin:20px">上传</button>
-        </form>
-       <!--  <input type="file" name="file">
-        <input type="submit" value="upload" > -->
-        <div id="app">
-            <ul>
-                <li v-for="item in itemList" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
-                    文件名字：{{item.filename}}
-                    文件大小：{{item.filesize}}</br>
-                </li>
-            </ul>
-        </div>
+
+            <div class="box">
+              
+              <div class="row">
+                <span class="item">
+                    <form id="uploadForm" enctype="multipart/form-data">
+                    <input id="file" type="file" name="file" > 
+                    <input type="radio" name="radio" value="ppt" />PPT 
+                    <input type="radio" name="radio" value="word" />脚本文件
+                    <input type="radio" name="radio" value="accessibility" />无障碍字幕
+                    <input type="radio" name="radio" value="gloss" />手语转写
+                    <input type="radio" name="radio" value="video" />视频
+                    <button id="upload" type="button" onclick="postRequest()"  style="margin:20px">上传</button>
+                   </form>
+                </span>
+              </div>
+              <div id="app" class="row">
+                 <span class="item">PPT文件列表
+                    <ul>
+                        <li v-for="item in itemList" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
+                            文件名字：{{item.filename}}
+                            文件大小：{{item.filesize}}</br>
+                        </li>
+                    </ul>
+                 </span>
+                 <span class="item">脚本文件列表</span>
+              </div>
+              <div class="row">
+                <span class="item">无障碍字幕文件列表</span>
+                <span class="item">手语转写文件列表</span>
+                <span class="item">视频文件列表</span>
+              </div>
+            </div>
         <script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.3.4/vue-resource.min.js"></script>
         
@@ -86,9 +110,8 @@
 }
 });
         </script>
-        <script>
-                function test(){
-                    //console.log('dlsjdf')
+        <script>            
+                function postRequest(url, params) {
                     var radios = document.getElementsByName("radio");
                     var tag = false;
                     var val;
@@ -104,22 +127,19 @@
                     } 
                     else {
                       alert("请选择上传的文件类型");
-                    }   
-                    
-                    self.postRequest() 
-                                        
-                               }
-                function postRequest(url, params) {
+                    } 
                     //var testFormData = new FormData();
                     //testFormData.append(file,document.getElementById('file').files[0]);
                     //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
                    console.log(document.getElementById('file').files[0])
+                   console.log(val)
                    // var a = document.getElementsByName('radio').value 
                    // console.log(a)
-                  var formdata = new FormData();
-                  formdata.append('file', document.getElementById('file').files[0]);
-                  //formdata.append('type','ppt');//第二个属性
-                    Vue.http.post("http://127.0.0.1:8000/mgmt_files/", formdata, {
+                   var formdata = new FormData();
+                   formdata.append('file', document.getElementById('file').files[0]);
+                   formdata.append('type',val);
+                   console.log(formdata.get('type'))
+                   Vue.http.post("http://127.0.0.1:8000/mgmt_files/", formdata, {
                         headers: {
                             'Content-type': 'multipart/form-data'
                         }
