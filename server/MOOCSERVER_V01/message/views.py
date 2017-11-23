@@ -15,27 +15,35 @@ sys.setdefaultencoding('utf-8')
 
 @csrf_exempt
 def mgmt_files(request): #列出树形目录，上传文件页面
-    print 'mgmt_files'
-    if request.method == 'POST':
-        path_root = "D:\\py\\ITFiles" #上传文件的主目录
-        myFile =request.FILES.get("file", None)    # 获取上传的文件，如果没有文件，则默认为None  
-        if not myFile:  
-            dstatus = "请选择需要上传的文件!"
+    #if request.method == "POST";
+    # print 'mgmt_files'
+    # print request.method
+    # if request.method == 'POST':
+    path_root = "F:\\moocPro" #上传文件的主目录
+    myFile = request.FILES.get("file",None) # 获取上传的文件，如果没有文件，则默认为None
+    print myFile
+    # print request
+    if not myFile:  
+        dstatus = "没有上传文件!"
+    else:
+        # print 'nihao'
+       # path_ostype = os.path.join(path_root,request.POST.get("ostype"))
+        path_dst_file = os.path.join(path_root,myFile.name)
+        #print path_ostype
+        print path_dst_file
+       # print os.path.isfile(path_dst_file)
+        if os.path.isfile(path_dst_file):
+            dstatus = "%s 已存在!"%(myFile.name)
+            print dstatus
         else:
-            path_ostype = os.path.join(path_root,request.POST.get("ostype"))
-            path_dst_file = os.path.join(path_ostype,myFile.name)
-            # print path_dst_file
-            if os.path.isfile(path_dst_file):
-                dstatus = "%s 已存在!"%(myFile.name)
-            else:
-                destination = open(path_dst_file,'wb+')    # 打开特定的文件进行二进制的写操作  
-                for chunk in myFile.chunks():      # 分块写入文件  
-                    destination.write(chunk)  
-                destination.close()  
-                dstatus = "%s 上传成功!"%(myFile.name)
-        return HttpResponse(str(dstatus))
+            destination = open(path_dst_file,'wb+')    # 打开特定的文件进行二进制的写操作  
+            for chunk in myFile.chunks():      # 分块写入文件  
+                destination.write(chunk)  
+            destination.close()  
+            dstatus = "%s 上传成功!"%(myFile.name)
+    return HttpResponse(str(dstatus))
 
-    return render(request,'sinfors/mgmt_files.html')
+    # return render(request,'sinfors/mgmt_files.html')
 
 
 def mgmt_file_download(request,*args,**kwargs): #提供文件下载页面
@@ -49,7 +57,7 @@ def mgmt_file_download(request,*args,**kwargs): #提供文件下载页面
                 else:
                     break
 
-    path_root = "D:\\py\\ITFiles"
+    path_root = "F:\\moocPro"
     if kwargs['fpath'] is not None and kwargs['fname'] is not None:
         file_fpath = os.path.join(path_root,kwargs['fpath']) #kwargs['fapth']是文件的上一级目录名称
         file_dstpath = os.path.join(file_fpath,kwargs['fname']) #kwargs['fname']是文件名称
