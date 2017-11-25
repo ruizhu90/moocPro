@@ -45,12 +45,18 @@
               </div>
               <div id="app" class="row">
                  <span class="item">PPT文件列表
+                    <!-- <form id="deleteFile" enctype="multipart/form-data"> -->
                     <ul>
                         <li v-for="item in itemList" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
                             文件名字：{{item.filename}}
-                            文件大小：{{item.filesize}}<button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
+                            文件大小：{{item.filesize}}
+                            <a href="F:\moocPro\server\MOOCSERVER_V01\files\ppt\test.txt">
+                                <button id="open" v-on:click="openFile(item.filename)">打开</button>
+                            </a>
+                            <button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
                         </li>
                     </ul>
+                   <!-- </form> -->
                  </span>
                  <span class="item">脚本文件列表</span>
               </div>
@@ -111,6 +117,38 @@
                deleteFile:function(params){
                        console.log('delete')
                        alert(params);
+                       
+                    Vue.http.post("http://127.0.0.1:8000/deleteFile/", {'name':params},{emulateJSON:true}).then(function(response) {
+                    return response.text();
+                    console.log(response)
+                }, function(err) {
+                    //alert("goodbye world")
+                    console.log(err)
+                }).then((text) => {
+                    // console.log(text)
+                    this.msg = text;
+                     alert(this.msg);
+                });
+
+               },
+               openFile:function(params){
+                   console.log('open')
+                   alert(params);
+                   Vue.http.post("http://127.0.0.1:8000/openFile/", {'name':params},{emulateJSON:true}).then(function(response) {
+                   return response.text();
+                   
+                }, function(err) {
+                    //alert("goodbye world")
+                    console.log(err)
+                }).then((text) => {
+                    // console.log(text)
+                    this.msg = text;
+                    var iframe = document.createElement("iframe");  
+                    document.body.appendChild(iframe);  
+                    iframe.src = this.msg;
+                    alert(this.msg);
+                });
+
                }
 }
 });
@@ -161,21 +199,7 @@
                 });
                 
                 }
-                function deleteFile(params){
-                    console.log(params)
-                    Vue.http.post("http://127.0.0.1:8000/deleteFile/").then(function(response) {
-                    return response.text();
-                    console.log(response)
-                }, function(err) {
-                    //alert("goodbye world")
-                    console.log(err)
-                }).then((text) => {
-                    // console.log(text)
-                    this.msg = text;
-                     alert(this.msg);
-                });
-                }
-
+                
         </script>
     </body>
 

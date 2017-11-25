@@ -14,9 +14,37 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 @csrf_exempt
 def deleteFile(request):
-     print 'deleteFile '
+     print 'deleteFile'
+     mydeleteFile = request.POST.get('name')
+     print 'deleteFilename is : ',mydeleteFile
+     #遍历所有文件目录，找到名字匹配的文件
+     filepath = ''
+     for dirpath, dirnames, filenames in os.walk(os.getcwd()):
+        for file in filenames:
+            if os.path.splitext(file)[0] == mydeleteFile:
+                filepath = os.path.join(dirpath, file)
 
+     print '删除文件的目录是：',filepath#返回想要删除文件的当前目录
+     if os.path.exists(filepath):
+        os.remove(filepath)
+        dstatus = "%s 删除成功!"%(mydeleteFile)
+     else:
+        dstatus = "%s 文件找不到，删除失败!"%(mydeleteFile)
+     return HttpResponse(str(dstatus))
+@csrf_exempt
+def openFile(request):
+    print 'openFile'
+    myopenFile = request.POST.get('name')
+    print 'openFilename is : ',myopenFile
+    filepath = ''
+    for dirpath, dirnames, filenames in os.walk(os.getcwd()):
+        for file in filenames:
+            if os.path.splitext(file)[0] == myopenFile:
+                filepath = os.path.join(dirpath, file)
 
+    print '打开文件的目录是：',filepath
+
+    return HttpResponse(filepath)
 
 
 
@@ -41,7 +69,7 @@ def mgmt_files(request): #列出树形目录，上传文件页面
     myFile = request.FILES.get("file",None) # 获取上传的文件，如果没有文件，则默认为None
     print myFile
     # print request
-    path_root = os.path.join('F:\\moocPro\\files',myTpye) #上传文件的主目录
+    path_root = os.path.join('F:\\moocPro\\server\\MOOCSERVER_V01\\files',myTpye) #上传文件的主目录
     print 'path_root: ',path_root
     if not myFile:  
         dstatus = "没有上传文件!"
@@ -120,10 +148,10 @@ def getFileNames(request):
 
 
 def getHtmlFiles(request):
-    print 'getHtmlFiles'
+    # print 'getHtmlFiles'
     # print os.getcwd()
-    print os.path.abspath('.')
-    print os.path.join('F:\moocPro\server\MOOCSERVER_V01', '\http-get1.html')
+    # print os.path.abspath('.')
+    # print os.path.join('F:\moocPro\server\MOOCSERVER_V01', '\http-get1.html')
     filepath = ''
     for dirpath, dirnames, filenames in os.walk(os.getcwd()):
         for file in filenames:
