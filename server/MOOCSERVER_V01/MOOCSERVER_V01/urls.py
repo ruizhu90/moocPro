@@ -21,11 +21,15 @@ from message.views import login
 from message.views import getFileNames
 from message.views import getHtmlFiles
 from message.views import mgmt_files
+from message.views import deleteFile
+from message.views import openFile
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^sign_up/$', getform),
-    url(r'^sign_up/log_in/$', login),
+    url(r'^sign_up/$', getform, name='sign_up'),
+    url(r'^log_in/$', login, name='log_in'),
     url(r'^getFileNames/$', getFileNames),
-    url(r'^http-get1.html$', getHtmlFiles),
+    url(r'^http-get1/$', getHtmlFiles),
     url(r'^mgmt_files/$', mgmt_files),
+    url(r'^deleteFile/$', deleteFile),
+    url(r'^openFile/$', openFile),
 ]

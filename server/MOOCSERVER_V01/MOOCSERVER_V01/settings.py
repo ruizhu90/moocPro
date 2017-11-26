@@ -108,9 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -126,10 +126,11 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static')
 # ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
-    ('css',os.path.join(STATIC_ROOT,'css').replace('\\','/') ),
-    ('js',os.path.join(STATIC_ROOT,'js').replace('\\','/') ),
-    ('images',os.path.join(STATIC_ROOT,'images').replace('\\','/') ),
-    ('upload',os.path.join(STATIC_ROOT,'upload').replace('\\','/') ),
+    os.path.join(BASE_DIR, 'static'),
+    #('css',os.path.join(STATIC_ROOT,'css').replace('\\','/') ),
+    #('js',os.path.join(STATIC_ROOT,'js').replace('\\','/') ),
+    #('image',os.path.join(STATIC_ROOT,'image').replace('\\','/') ),
+    #('upload',os.path.join(STATIC_ROOT,'upload').replace('\\','/') ),
 )
