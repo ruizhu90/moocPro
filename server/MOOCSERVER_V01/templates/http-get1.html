@@ -1,143 +1,219 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
     <style type="text/css">
-       
-       .box {
-              display: flex;
-              flex-wrap: wrap;
-            }
 
-       .row{
-              flex-basis: 100%;
-              display:flex;
-            }
+    .box {
+      display: flex;
+      flex-wrap: wrap;
+  }
 
-       .row:nth-child(2){
-              justify-content: space-between;
-            }
+  .row{
+      flex-basis: 100%;
+      display:flex;
+  }
 
-       .row:nth-child(3){
-              justify-content: space-between;
-            }
-    </style>
-    </head>
+  .row:nth-child(2){
+      justify-content: space-between;
+  }
 
-    <body>
+  .row:nth-child(3){
+      justify-content: space-between;
+  }
+</style>
+</head>
 
-            <div class="box">
-              
-              <div class="row">
-                <span class="item">
-                    <form id="uploadForm" enctype="multipart/form-data">
-                    <input id="file" type="file" name="file" > 
-                    <input type="radio" name="radio" value="ppt" />PPT 
-                    <input type="radio" name="radio" value="word" />脚本文件
-                    <input type="radio" name="radio" value="accessibility" />无障碍字幕
-                    <input type="radio" name="radio" value="gloss" />手语转写
-                    <input type="radio" name="radio" value="video" />视频
-                    <button id="upload" type="button" onclick="postRequest()"  style="margin:20px">上传</button>
-                   </form>
-                </span>
-              </div>
-              <div id="app" class="row">
-                 <span class="item">PPT文件列表
-                    <!-- <form id="deleteFile" enctype="multipart/form-data"> -->
-                    <ul>
-                        <li v-for="item in itemList" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
-                            文件名字：{{item.filename}}
-                            文件大小：{{item.filesize}}
-                            <a href="F:\moocPro\server\MOOCSERVER_V01\files\ppt\test.txt">
-                                <button id="open" v-on:click="openFile(item.filename)">打开</button>
-                            </a>
-                            <button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
-                        </li>
-                    </ul>
-                   <!-- </form> -->
-                 </span>
-                 <span class="item">脚本文件列表</span>
-              </div>
-              <div class="row">
-                <span class="item">无障碍字幕文件列表</span>
-                <span class="item">手语转写文件列表</span>
-                <span class="item">视频文件列表</span>
-              </div>
-            </div>
-        <script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.3.4/vue-resource.min.js"></script>
-        
-       <!--  <script src="https://127.0.0.1:8000/JSON/json2.js"></script> -->
-        
-        <script>
-             var app = new Vue({
-                el:"#app",
-                data:{
+<body>
+
+    <div class="box">
+
+      <div class="row">
+        <span class="item">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input id="file" type="file" name="file" > 
+                <input type="radio" name="radio" value="ppt" />PPT 
+                <input type="radio" name="radio" value="word" />脚本文件
+                <input type="radio" name="radio" value="accessibility" />无障碍字幕
+                <input type="radio" name="radio" value="gloss" />手语转写
+                <input type="radio" name="radio" value="video" />视频
+                <button id="upload" type="button" onclick="postRequest()"  style="margin:20px">上传</button>
+            </form>
+        </span>
+    </div>
+    <div id="app" class="row">
+        <span class="item">PPT文件列表
+        <ul>
+            <li v-for="item in itemList1" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
+                文件名字：{{item.filename}}
+                文件大小：{{item.filesize}}
+                <button id="open" v-on:click="openFile(item.filename)">打开</button>
+                <button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
+            </li>
+        </ul>    
+        </span>
+
+        <span class="item">脚本文件列表
+         <ul>
+            <li v-for="item in itemList2" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
+                文件名字：{{item.filename}}
+                文件大小：{{item.filesize}}
+                <button id="open" v-on:click="openFile(item.filename)">打开</button>
+                <button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
+            </li>
+        </ul>
+        </span>
+
+        <span class="item">手语转写文件列表
+               <ul>
+                   <li v-for="item in itemList3" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
+                        文件名字：{{item.filename}}
+                        文件大小：{{item.filesize}}
+                        <button id="open" v-on:click="openFile(item.filename)">打开</button>
+                        <button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
+                    </li>
+                </ul>
+        </span>
+        <span class="item">无障碍字幕文件列表
+        <ul>
+           <li v-for="item in itemList4" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
+                文件名字：{{item.filename}}
+                文件大小：{{item.filesize}}
+                <button id="open" v-on:click="openFile(item.filename)">打开</button>
+                <button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
+            </li>
+        </ul>
+        </span>
+
+
+        <span class="item">视频文件列表
+        <ul>
+                   <li v-for="item in itemList5" :id="item.id"> <!-- :id="item.id" style="list-style-type: none;" -->
+                        文件名字：{{item.filename}}
+                        文件大小：{{item.filesize}}
+                        <button id="open" v-on:click="openFile(item.filename)">打开</button>
+                        <button id="delete" v-on:click="deleteFile(item.filename)">删除</button></br>
+                    </li>
+                </ul>
+        </span>
+</div>
+
+<script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.3.4/vue-resource.min.js"></script>
+
+<!--  <script src="https://127.0.0.1:8000/JSON/json2.js"></script> -->
+
+<script>
+ var app = new Vue({
+    el:"#app",
+    data:{
                 //声明空数组，进行数据接收，最后传递到前端页面
-                itemList:[], 
-                },
+                itemList1:[], 
+                itemList2:[], 
+                itemList3:[], 
+                itemList4:[], 
+                itemList5:[], 
+            },
                 //向data数组里添加数据
                 mounted:function(){
-                this.getData();
+                    this.getData();
                 },
                 methods: {
 
-                getData:function () {
-                var self = this;
-                this.$http.get("http://127.0.0.1:8000/getFileNames/").then(function (res) {
-                 
-                console.log(res);
-                 
-                //var lens = res.body.lists.length;
+                    getData:function () {
+                        var self = this;
+                        this.$http.get("http://127.0.0.1:8000/getFileNames/").then(function (res) {
+
+                            console.log(res);
+
+
+                // {file:{
+                //     sub1:[{}, {}, {}],
+                //     sub2:[],
+                //     sub3:[],
+                //     sub4:[],
+                //     sub5:[]
+                // }}
+
+                var lens = res.body.lists1.length;
                 //console.log(lens);
                 //获取了当前数组的长度，为3
-                console.log(res.body.lists);
+                //console.log(res.body.lists1);
                 
-                for(var i= 0,len=res.body.lists.length;i<len;i++){
+                for(var i= 0,len=res.body.lists1.length;i<len;i++){
                 //已经获取json数组中的数据，接下来如何传递到前端页面中
                 //获取全部数据
-                var selData = res.body.lists[i]; 
-                console.log(selData);
-                console.log(selData.filename)
-                 
+                var selData = res.body.lists1[i]; 
+                //console.log(selData);
+                //console.log(selData.filename)
+
                 //获取数组中的部分数据
                 // var part = res.body.lists[i].filename;
                 // console.log(part);
                 //将获取的数据push到空的数组中itenList，
-                 
-                self.itemList.push(selData);
+
+                self.itemList1.push(selData);
+
                 //  console.log("ldskjf")
                 // }
                 // })
-               }
-})
-},
-               deleteFile:function(params){
+            }
+            var lens = res.body.lists2.length;
+            for(var i= 0,len=res.body.lists2.length;i<len;i++){
+                var selData = res.body.lists2[i]; 
+                console.log(selData);
+                console.log(selData.filename)
+                self.itemList2.push(selData);
+            }
+             var lens = res.body.lists3.length;
+            for(var i= 0,len=res.body.lists3.length;i<len;i++){
+                var selData = res.body.lists3[i]; 
+                console.log(selData);
+                console.log(selData.filename)
+                self.itemList3.push(selData);
+            }
+             var lens = res.body.lists4.length;
+            for(var i= 0,len=res.body.lists4.length;i<len;i++){
+                var selData = res.body.lists4[i]; 
+                console.log(selData);
+                console.log(selData.filename)
+                self.itemList4.push(selData);
+            }
+             var lens = res.body.lists5.length;
+            for(var i= 0,len=res.body.lists5.length;i<len;i++){
+                var selData = res.body.lists5[i]; 
+                console.log(selData);
+                console.log(selData.filename)
+                self.itemList5.push(selData);
+            }
+        })
+                    },
+                    deleteFile:function(params){
                        console.log('delete')
                        alert(params);
-                       
-                    Vue.http.post("http://127.0.0.1:8000/deleteFile/", {'name':params},{emulateJSON:true}).then(function(response) {
-                    return response.text();
-                    console.log(response)
-                }, function(err) {
+
+                       Vue.http.post("http://127.0.0.1:8000/deleteFile/", {'name':params},{emulateJSON:true}).then(function(response) {
+                        return response.text();
+                        console.log(response)
+                    }, function(err) {
                     //alert("goodbye world")
                     console.log(err)
                 }).then((text) => {
                     // console.log(text)
                     this.msg = text;
-                     alert(this.msg);
+                    alert(this.msg);
                 });
 
-               },
-               openFile:function(params){
-                   console.log('open')
-                   alert(params);
-                   Vue.http.post("http://127.0.0.1:8000/openFile/", {'name':params},{emulateJSON:true}).then(function(response) {
+            },
+            openFile:function(params){
+               console.log('open')
+               alert(params);
+               Vue.http.post("http://127.0.0.1:8000/openFile/", {'name':params},{emulateJSON:true}).then(function(response) {
                    return response.text();
-                   
-                }, function(err) {
+
+               }, function(err) {
                     //alert("goodbye world")
                     console.log(err)
                 }).then((text) => {
@@ -149,33 +225,33 @@
                     alert(this.msg);
                 });
 
-               }
-}
-});
-        </script>
-        <script>            
-                function postRequest(url, params) {
-                    var radios = document.getElementsByName("radio");
-                    var tag = false;
-                    var val;
-                    for(radio in radios) {
-                       if(radios[radio].checked) {
-                          tag = true;
-                          val = radios[radio].value;
-                          break;
-                       }
-                    }
-                    if(tag) {
-                       alert("需要上传的文件类型是：" + val);
-                    } 
-                    else {
-                      alert("请选择上传的文件类型");
-                    } 
+            }
+        }
+    });
+</script>
+<script>            
+    function postRequest(url, params) {
+        var radios = document.getElementsByName("radio");
+        var tag = false;
+        var val;
+        for(radio in radios) {
+           if(radios[radio].checked) {
+              tag = true;
+              val = radios[radio].value;
+              break;
+          }
+      }
+      if(tag) {
+       alert("需要上传的文件类型是：" + val);
+   } 
+   else {
+      alert("请选择上传的文件类型");
+  } 
                     //var testFormData = new FormData();
                     //testFormData.append(file,document.getElementById('file').files[0]);
                     //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
-                   console.log(document.getElementById('file').files[0])
-                   console.log(val)
+                    console.log(document.getElementById('file').files[0])
+                    console.log(val)
                    // var a = document.getElementsByName('radio').value 
                    // console.log(a)
                    var formdata = new FormData();
@@ -183,10 +259,10 @@
                    formdata.append('type',val);
                    console.log(formdata.get('type'))
                    Vue.http.post("http://127.0.0.1:8000/mgmt_files/", formdata, {
-                        headers: {
-                            'Content-type': 'multipart/form-data'
-                        }
-                    }).then(function(response) {
+                    headers: {
+                        'Content-type': 'multipart/form-data'
+                    }
+                }).then(function(response) {
                     return response.text();
                     console.log(response)
                 }, function(err) {
@@ -195,12 +271,12 @@
                 }).then((text) => {
                     // console.log(text)
                     this.msg = text;
-                     alert(this.msg);
+                    alert(this.msg);
                 });
                 
-                }
-                
+            }
+
         </script>
     </body>
 
-</html>
+    </html>

@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+
+# -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.shortcuts import render
@@ -9,9 +10,22 @@ import os
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import StreamingHttpResponse
+import os, sys, platform
+import posixpath
+import BaseHTTPServer
+from SocketServer import ThreadingMixIn
+import threading
+import urllib, urllib2
+import cgi
+import shutil
+import mimetypes
+import re
+import time
+import json
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
 @csrf_exempt
 def deleteFile(request):
      print 'deleteFile'
@@ -19,11 +33,17 @@ def deleteFile(request):
      print 'deleteFilename is : ',mydeleteFile
      #遍历所有文件目录，找到名字匹配的文件
      filepath = ''
+     # a = os.getcwd()
+     # print 'os.getcwd(): ',a
+     # print 'is dir: ', os.path.isdir(os.getcwd())
      for dirpath, dirnames, filenames in os.walk(os.getcwd()):
-        for file in filenames:
-            if os.path.splitext(file)[0] == mydeleteFile:
-                filepath = os.path.join(dirpath, file)
-
+         for file in filenames:
+             # print 'file: ', file
+             if file == mydeleteFile.decode('utf-8').encode('gbk'):
+                print 'dirpath is: ',dirpath
+                filepath = os.path.join(dirpath, mydeleteFile)
+                filepath = filepath.decode('utf-8').encode('gbk')
+                # uipath = unicode(filepath , "utf8")
      print '删除文件的目录是：',filepath#返回想要删除文件的当前目录
      if os.path.exists(filepath):
         os.remove(filepath)
@@ -31,6 +51,8 @@ def deleteFile(request):
      else:
         dstatus = "%s 文件找不到，删除失败!"%(mydeleteFile)
      return HttpResponse(str(dstatus))
+
+
 @csrf_exempt
 def openFile(request):
     print 'openFile'
@@ -39,9 +61,10 @@ def openFile(request):
     filepath = ''
     for dirpath, dirnames, filenames in os.walk(os.getcwd()):
         for file in filenames:
-            if os.path.splitext(file)[0] == myopenFile:
-                filepath = os.path.join(dirpath, file)
-
+            if file == myopenFile.decode('utf-8').encode('gbk'):
+                print 'dirpath is: ',dirpath
+                filepath = os.path.join(dirpath, myopenFile)
+                filepath = filepath.decode('utf-8').encode('gbk')
     print '打开文件的目录是：',filepath
 
     return HttpResponse(filepath)
@@ -133,18 +156,157 @@ def login(request):
 
     return render(request, 'log_in.html')
 
+# @csrf_exempt
+# def getFileNames(request):
+#     # print 'getFileNames'
+#     # data = { "lists":[{"filename":'test', "filesize":'data'},
+#     #                  {"filename":'test1', "filesize":'data1'},
+#     #                  {"filename":'test2', "filesize":'data2'}
+#     # ] }
+#     # jsonData = json.dumps(data)
+# return HttpResponse(jsonData, content_type="application/json")
 @csrf_exempt
 def getFileNames(request):
-    print 'getFileNames'
-    data = { "lists":[{"filename":'test', "filesize":'data'},
-                     {"filename":'test1', "filesize":'data1'},
-                     {"filename":'test2', "filesize":'data2'}
-    ] }
-    jsonData = json.dumps(data)
+    fileNames = []
+    fileSizes = []
+    path1 = 'F:\moocPro\server\MOOCSERVER_V01\\files\ppt'
+    
+    print 'path is: ', path1
+    getListFiles(path1, fileNames, fileSizes)
+    print 'fileNames length is: ', len(fileNames)
+    
+    data1 = []
+    data2 = []
+    data3 = []
+    data4 = []
+    data5 = []
+    for index in range(len(fileNames)):
+      #print 'index is: ', index
+      tempDic1 = {"filename":fileNames[index], "filesize":fileSizes[index]}
+      #tempDic.get((tempDic.keys())[0])
+      #(tempDic.values())[0]
+      data1.append(tempDic1)
 
-    return HttpResponse(jsonData, content_type="application/json")
+    path2 = 'F:\moocPro\server\MOOCSERVER_V01\\files\word'
+    fileNames = []
+    fileSizes = []
+    getListFiles(path2, fileNames, fileSizes)
+    # print 'fileNames is: ', fileNames
+    for index in range(len(fileNames)):
+      #print 'index is: ', index
+      tempDic2 = {"filename":fileNames[index], "filesize":fileSizes[index]}
+      #tempDic.get((tempDic.keys())[0])
+      #(tempDic.values())[0]
+      data2.append(tempDic2)
+    # print 'data2 is: ',data2
 
+    path3 = 'F:\moocPro\server\MOOCSERVER_V01\\files\gloss'
+    fileNames = []
+    fileSizes = []
+    getListFiles(path3, fileNames, fileSizes)
+    # print 'fileNames is: ', fileNames
+    for index in range(len(fileNames)):
+      #print 'index is: ', index
+      tempDic3 = {"filename":fileNames[index], "filesize":fileSizes[index]}
+      #tempDic.get((tempDic.keys())[0])
+      #(tempDic.values())[0]
+      data3.append(tempDic3)
+    # print 'data2 is: ',data2
 
+    path4 = 'F:\moocPro\server\MOOCSERVER_V01\\files\\accessibility'
+    fileNames = []
+    fileSizes = []
+    getListFiles(path4, fileNames, fileSizes)
+    # print 'fileNames is: ', fileNames
+    for index in range(len(fileNames)):
+      #print 'index is: ', index
+      tempDic4 = {"filename":fileNames[index], "filesize":fileSizes[index]}
+      #tempDic.get((tempDic.keys())[0])
+      #(tempDic.values())[0]
+      data4.append(tempDic4)
+    # print 'data2 is: ',data2
+
+    path5 = 'F:\moocPro\server\MOOCSERVER_V01\\files\\video'
+    fileNames = []
+    fileSizes = []
+    getListFiles(path5, fileNames, fileSizes)
+    # print 'fileNames is: ', fileNames
+    for index in range(len(fileNames)):
+      #print 'index is: ', index
+      tempDic5 = {"filename":fileNames[index], "filesize":fileSizes[index]}
+      #tempDic.get((tempDic.keys())[0])
+      #(tempDic.values())[0]
+      data5.append(tempDic5)
+    # print 'data2 is: ',data2
+    
+    data = {"lists1":data1,
+            "lists2":data2,
+            "lists3":data3,
+            "lists4":data4,
+            "lists5":data5
+        }
+
+    # data = { "file":[{"filename":self.fileNames[0], "filesize":self.fileSizes[0]},
+    #                  {"filename":self.fileNames[1], "filesize":self.fileSizes[1]},
+    #                  {"filename":self.fileNames[2], "filesize":self.fileSizes[2]}
+    # ] }
+    message = json.dumps(data)
+    #print type(message),message
+
+    # self.send_response(200)
+    # self.send_header('Content-type', 'application/json')
+    # self.end_headers()
+    # self.wfile.write(message)
+    return HttpResponse(message, content_type="application/json")
+  
+
+  # fileList = []
+  # fileDic = {}
+  #print fileDic 
+# fileNames = []
+# fileSizes = []
+def getListFiles(path, fileNames, fileSizes):
+    for root, dirs, files in os.walk(path):  
+        # fileNames = files
+        for file in files: 
+            print 'file name: ', file
+            print 'file path :', os.path.join(path, file)
+            fileNames.append(file)
+            fileSizes.append(sizeof_fmt(os.path.getsize(os.path.join(path, file))))
+        break
+
+def sizeof_fmt(num):
+  for x in ['bytes','KB','MB','GB']:
+    if num < 1024.0:
+      return "%3.1f%s" % (num, x)
+    num /= 1024.0
+  return "%3.1f%s" % (num, 'TB')
+
+def translate_path(self, path):
+    """Translate a /-separated PATH to the local filename syntax.
+  
+    Components that mean special things to the local file system
+    (e.g. drive or directory names) are ignored. (XXX They should
+    probably be diagnosed.)
+  
+    """
+    # abandon query parameters
+    print 'translate_path first path is: ', path
+    path = path.split('?',1)[0]
+    path = path.split('#',1)[0]
+    path = posixpath.normpath(urllib.unquote(path))
+    words = path.split('/')
+    words = filter(None, words)
+    path = os.getcwd()
+    print 'translate_path second path is: ', path
+    for word in words:
+      drive, word = os.path.splitdrive(word)
+      head, word = os.path.split(word)
+      if word in (os.curdir, os.pardir): continue
+      path = os.path.join(path, word)
+    print 'translate_path path is: ', path
+    print 'translate_path wuruizhu is: ', path
+    return path
 
 
 def getHtmlFiles(request):
